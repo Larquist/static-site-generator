@@ -1,3 +1,4 @@
+# This is the main file for executing the program.
 from textnode import TextNode
 
 def main():

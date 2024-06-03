@@ -5,6 +5,7 @@ from textnode import TextNode
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
+        # Test to make sure __eq__ is working correctly.
         node = TextNode("This is a text node", "bold")
         node2 = TextNode("This is a text node", "bold")
         self.assertEqual(node, node2)
