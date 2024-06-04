@@ -30,19 +30,19 @@ class TextNode:
 
     # Convert textnode to htmlnode
     def text_node_to_html_node(self):
-        if self.text_type not in valid_types:
+        if self.text_type not in self.valid_types:
             raise Exception("text_type of TextNode not valid")
 
         if self.text_type == "text_type_text":
-            return LeafNode(None, self.text)
+            return self.LeafNode(None, self.text)
         if self.text_type == "text_type_bold":
-            return LeafNode("b", self.text)
+            return self.LeafNode("b", self.text)
         if self.text_type == "text_type_italic":
-            return LeafNode("i", self.text)
+            return self.LeafNode("i", self.text)
         if self.text_type == "text_type_code":
-            return LeafNode("code", self.text)
+            return self.LeafNode("code", self.text)
         if self.text_type == "text_type_link":
-            return LeafNode("a", self.text, {"href": self.url})
+            return self.LeafNode("a", self.text, {"href": self.url})
         if self.text_type == "text_type_image":
-            return LeafNode("img", "", {"src": self.url, "alt": self.text})
+            return self.LeafNode("img", "", {"src": self.url, "alt": self.text})
         
