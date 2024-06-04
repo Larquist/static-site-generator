@@ -1,4 +1,8 @@
 class HTMLNode:
+    # tag - A string representing the HTML tag name (e.g. "p", "a", "h1", etc.)
+    # value - A string representing the value of the HTML tag (e.g. the text inside a paragraph)
+    # children - A list of HTMLNode objects representing the children of this node
+    # props - A dictionary of key-value pairs representing the attributes of the HTML tag.
     def __init__(self, tag = None, value = None, children = None, props = None):
         # Exceptions for values passed in
         if tag is not None and not isinstance(tag, str):

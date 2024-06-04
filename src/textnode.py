@@ -1,4 +1,15 @@
 class TextNode:
+    from leafnode import LeafNode
+    
+    valid_types = [
+            "text_type_text",
+            "text_type_bold",
+            "text_type_italic",
+            "text_type_code",
+            "text_type_link",
+            "text_type_image"
+        ]
+
     # text = text content of the node
     # text_type = type of text the node contains, eg. bold, italics
     # url = URL of link or image, default is None if nothing is passed
@@ -17,4 +28,21 @@ class TextNode:
     def __repr__(self):
         return f"TextNode(self, {self.text}, {self.text_type}, {self.url})"
 
-    
+    # Convert textnode to htmlnode
+    def text_node_to_html_node(self):
+        if self.text_type not in valid_types:
+            raise Exception("text_type of TextNode not valid")
+
+        if self.text_type == "text_type_text":
+            return LeafNode(None, self.text)
+        if self.text_type == "text_type_bold":
+            return LeafNode("b", self.text)
+        if self.text_type == "text_type_italic":
+            return LeafNode("i", self.text)
+        if self.text_type == "text_type_code":
+            return LeafNode("code", self.text)
+        if self.text_type == "text_type_link":
+            return LeafNode("a", self.text, {"href": self.url})
+        if self.text_type == "text_type_image":
+            return LeafNode("img", "", {"src": self.url, "alt": self.text})
+        
