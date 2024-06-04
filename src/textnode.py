@@ -1,15 +1,13 @@
-class TextNode:
-    from leafnode import LeafNode
+from leafnode import LeafNode
     
-    valid_types = [
-            "text_type_text",
-            "text_type_bold",
-            "text_type_italic",
-            "text_type_code",
-            "text_type_link",
-            "text_type_image"
-        ]
+text_type_text = "text"
+text_type_bold = "bold"
+text_type_italic = "italic"
+text_type_code = "code"
+text_type_link = "link"
+text_type_image = "image"
 
+class TextNode:
     # text = text content of the node
     # text_type = type of text the node contains, eg. bold, italics
     # url = URL of link or image, default is None if nothing is passed
@@ -28,21 +26,19 @@ class TextNode:
     def __repr__(self):
         return f"TextNode(self, {self.text}, {self.text_type}, {self.url})"
 
-    # Convert textnode to htmlnode
-    def text_node_to_html_node(self):
-        if self.text_type not in self.valid_types:
-            raise Exception("text_type of TextNode not valid")
-
-        if self.text_type == "text_type_text":
-            return self.LeafNode(None, self.text)
-        if self.text_type == "text_type_bold":
-            return self.LeafNode("b", self.text)
-        if self.text_type == "text_type_italic":
-            return self.LeafNode("i", self.text)
-        if self.text_type == "text_type_code":
-            return self.LeafNode("code", self.text)
-        if self.text_type == "text_type_link":
-            return self.LeafNode("a", self.text, {"href": self.url})
-        if self.text_type == "text_type_image":
-            return self.LeafNode("img", "", {"src": self.url, "alt": self.text})
+# Convert textnode to htmlnode
+def text_node_to_html_node(node):
+    if node.text_type == text_type_text:
+        return LeafNode(None, node.text)
+    if node.text_type == text_type_bold:
+        return LeafNode("b", node.text)
+    if node.text_type == text_type_italic:
+        return LeafNode("i", node.text)
+    if node.text_type == text_type_code:
+        return LeafNode("code", node.text)
+    if node.text_type == text_type_link:
+        return LeafNode("a", node.text, {"href": node.url})
+    if node.text_type == text_type_image:
+        return LeafNode("img", "", {"src": node.url, "alt": node.text})
+    raise Exception("text_type of TextNode not valid")
         
