@@ -42,3 +42,30 @@ def text_node_to_html_node(node):
         return LeafNode("img", "", {"src": node.url, "alt": node.text})
     raise Exception("text_type of TextNode not valid")
         
+# old_nodes = list of nodes
+# delimiter = the symbol to look for
+# text_type = the textnode type to set the segmented text to
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    new_nodes = []
+    for node in old_nodes:
+        split_text = node.text.split(delimiter)
+        # If length of list is 1, no
+        if len(split_text) == 1:
+            new_nodes.append(node)
+        # If len of list is even, it means only one symbol was found in the list
+        elif len(split_text) % 2 == 0:
+            raise Exception(f"Closing symbol not found: {delimiter}")
+        else:
+            for i in range(0, len(split_text)):
+                if split_text[i] != '':
+                    if i % 2 == 0 or i == 0:
+                        new_nodes.append(TextNode(split_text[i], text_type_text))
+                    else:
+                        new_nodes.append(TextNode(split_text[i], text_type))
+
+    return new_nodes
+
+# TODO: add tests for split_nodes_delimiter
+        
+
+        
