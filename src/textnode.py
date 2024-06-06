@@ -1,3 +1,5 @@
+import re
+
 from leafnode import LeafNode
     
 text_type_text = "text"
@@ -26,7 +28,7 @@ class TextNode:
     def __repr__(self):
         return f"TextNode(self, '{self.text}', '{self.text_type}', {self.url})"
 
-# Convert textnode to htmlnode
+# Convert textnode to htmlnode(LeafNode)
 def text_node_to_html_node(node):
     if node.text_type == text_type_text:
         return LeafNode(None, node.text)
@@ -58,14 +60,21 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         else:
             for i in range(0, len(split_text)):
                 if split_text[i] != '':
+                    # If index is even or the first index, it will be a regular text node
                     if i % 2 == 0 or i == 0:
                         new_nodes.append(TextNode(split_text[i], text_type_text))
+                    # If index is odd, it is the desired text to seperate
                     else:
                         new_nodes.append(TextNode(split_text[i], text_type))
 
     return new_nodes
 
-# TODO: add tests for split_nodes_delimiter
+# Takes raw text and returns a tuple with alt text and the url of the image
+# !\[(.*?)\]\((.*?)\) - Regex expression for capturing
+def extract_markdown_images(text):
+    return re.findall(r"!\[(.*?)\]\((.*?)\)", text)
         
+def extract_markdown_links(text):
+    return re.findall(r"\[(.*?)\]\((.*?)\)", text)
 
         

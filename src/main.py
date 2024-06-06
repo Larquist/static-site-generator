@@ -7,14 +7,16 @@ from textnode import (
     text_type_code,
     text_type_image,
     text_type_italic,
-    split_nodes_delimiter
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links
 )
 
-def main():
-    node = TextNode("This is text with a *bold word", text_type_bold)
-    new_nodes = split_nodes_delimiter([node], "*", text_type_bold)
+import re
 
-    print(new_nodes)
+def main():
+    text = "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)"
+    print(extract_markdown_links(text))
 
 
 main()
