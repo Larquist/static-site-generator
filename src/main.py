@@ -11,7 +11,7 @@ from textnode import (
 )
 
 def main():
-    node = TextNode("This is text with a *bold* word", text_type_bold)
+    node = TextNode("This is text with a *bold word", text_type_bold)
     new_nodes = split_nodes_delimiter([node], "*", text_type_bold)
 
     print(new_nodes)

@@ -9,6 +9,7 @@ from textnode import (
     text_type_image,
     text_type_link,
     text_node_to_html_node,
+    split_nodes_delimiter
 )
 from leafnode import LeafNode
 
@@ -20,10 +21,15 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("This is a text node", "bold")
         self.assertEqual(node, node2)
 
+        # Should equal
         url_none = TextNode("This is a text node with None as url", "italic", None)
         url_none2 = TextNode("This is a text node with None as url", "italic")
         self.assertEqual(url_none, url_none2)
 
+
+    def test_text_node_to_html_node(self):
+        # Should equal
+        node = TextNode("This is a text node", "bold")
         leaf_node = LeafNode("b", "This is a text node")
         self.assertEqual(text_node_to_html_node(node), leaf_node)
 
@@ -31,6 +37,45 @@ class TestTextNode(unittest.TestCase):
         image_leaf_node = LeafNode("img", "", {"src": "./public/test.jpg", "alt": "this is alt text"})
         self.assertEqual(text_node_to_html_node(image_text_node), image_leaf_node)
 
+    
+    def test_split_nodes_delimiter(self):
+        # Bold block test variables
+        node = TextNode("This is text with a *bold* word", text_type_text)
+        new_nodes = split_nodes_delimiter([node], "*", text_type_bold)
+        expected = [
+            TextNode("This is text with a ", text_type_text),
+            TextNode("bold", text_type_bold),
+            TextNode(" word", text_type_text)
+        ]
+
+        # Code block test variables
+        node2 = TextNode("This is a `code block`", text_type_code)
+        new_nodes2 = split_nodes_delimiter([node2], "`", text_type_code)
+        expected2 = [
+            TextNode("This is a ", text_type_text),
+            TextNode("code block", text_type_code)
+        ]
+
+        # 2 nodes expected test variable
+        new_nodes3 = split_nodes_delimiter([node, node2], '*', text_type_bold)
+        new_nodes4 = split_nodes_delimiter(new_nodes3, "`", text_type_code)
+        expected3 = [
+            TextNode("This is text with a ", text_type_text),
+            TextNode("bold", text_type_bold),
+            TextNode(" word", text_type_text),
+            TextNode("This is a ", text_type_text),
+            TextNode("code block", text_type_code)
+        ]
+
+        self.assertEqual(new_nodes, expected)
+        self.assertEqual(new_nodes2, expected2)
+        self.assertEqual(new_nodes4, expected3)
+
+        # Error test
+        node3 = TextNode("This is text with a *bold word", text_type_bold)
+        expected4 = Exception("Closing symbol not found: *")
+        with self.assertRaises(Exception):
+            split_nodes_delimiter([node3], "*", text_type_bold)
 
 if __name__ == "__main__":
     unittest.main()
