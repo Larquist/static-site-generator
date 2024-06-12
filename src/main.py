@@ -9,14 +9,18 @@ from textnode import (
     text_type_italic,
     split_nodes_delimiter,
     extract_markdown_images,
-    extract_markdown_links
+    extract_markdown_links,
+    split_nodes_image,
+    split_nodes_link
 )
 
 import re
 
 def main():
-    text = "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)"
-    print(extract_markdown_links(text))
+    node = TextNode("This is text with an [image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)", text_type_text)
+
+    extract = split_nodes_link([node])
+    print(extract)
 
 
 main()

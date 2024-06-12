@@ -69,6 +69,45 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
     return new_nodes
 
+def split_nodes_image(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        text = node.text
+        extract = extract_markdown_images(text)
+        if len(extract) == 1:
+            new_nodes.append(node)
+        else:
+            for i in range(0, len(extract)):
+                text = text.split(f"![{extract[i][0]}]({extract[i][1]})")
+
+                text_node = TextNode(text[0], text_type_text)
+                new_nodes.append(text_node)
+                text = text[1]
+
+                new_nodes.append(TextNode(extract[i][0], text_type_image, extract[i][1]))
+
+    return new_nodes
+                
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        text = node.text
+        extract = extract_markdown_links(text)
+        if len(extract) == 1:
+            new_nodes.append(node)
+        else:
+            for i in range(0, len(extract)):
+                text = text.split(f"[{extract[i][0]}]({extract[i][1]})")
+
+                text_node = TextNode(text[0], text_type_text)
+                new_nodes.append(text_node)
+                text = text[1]
+
+                new_nodes.append(TextNode(extract[i][0], text_type_link, extract[i][1]))
+
+    return new_nodes
+
 # Takes raw text and returns a tuple with alt text and the url of the image
 # !\[(.*?)\]\((.*?)\) - Regex expression for capturing
 def extract_markdown_images(text):
