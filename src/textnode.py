@@ -74,7 +74,7 @@ def split_nodes_image(old_nodes):
     for node in old_nodes:
         text = node.text
         extract = extract_markdown_images(text)
-        if len(extract) == 1:
+        if len(extract) == 0:
             new_nodes.append(node)
         else:
             for i in range(0, len(extract)):
@@ -94,7 +94,7 @@ def split_nodes_link(old_nodes):
     for node in old_nodes:
         text = node.text
         extract = extract_markdown_links(text)
-        if len(extract) == 1:
+        if len(extract) == 0:
             new_nodes.append(node)
         else:
             for i in range(0, len(extract)):
@@ -116,4 +116,10 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     return re.findall(r"\[(.*?)\]\((.*?)\)", text)
 
-        
+def text_to_textnode(text):
+    split_images = split_nodes_image([TextNode(text, text_type_text)])
+    split_links = split_nodes_link(split_images)
+    split_code = split_nodes_delimiter(split_links, "`", text_type_code)
+    split_bold = split_nodes_delimiter(split_code, "**", text_type_bold)
+    split_italic = split_nodes_delimiter(split_bold, "*", text_type_italic)
+    return split_italic
