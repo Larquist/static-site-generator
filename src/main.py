@@ -18,11 +18,13 @@ from textnode import (
 import re
 
 def main():
-    node = TextNode("This is text with an [link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)", text_type_text)
-    text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
-
-    extract = text_to_textnode(text)
-    print(extract)
+    one = extract_markdown_images("This is a ![test image](https://github.com/larquist/test_image.jpg) right back there.")
+    two = [
+            TextNode("This is a ", text_type_text),
+            TextNode("test image", text_type_image, "https://github.com/larquist/test_image.jpg"),
+            TextNode(" right back there.", text_type_text)
+        ]
+    print(one, two, one == two)
 
 
 main()

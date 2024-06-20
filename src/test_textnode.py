@@ -9,7 +9,11 @@ from textnode import (
     text_type_image,
     text_type_link,
     text_node_to_html_node,
-    split_nodes_delimiter
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links,
+    split_nodes_image,
+    split_nodes_link
 )
 from leafnode import LeafNode
 
@@ -76,6 +80,30 @@ class TestTextNode(unittest.TestCase):
         expected4 = Exception("Closing symbol not found: *")
         with self.assertRaises(Exception):
             split_nodes_delimiter([node3], "*", text_type_bold)
+
+
+    def test_extract_markdown_images(self):
+        text_one_image = "This is a ![test image](https://github.com/larquist/test_image.jpg) right back there."
+        text_multiple_image = "This is a ![test image](https://github.com/larquist/test_image.jpg) right back there. Here is ![another](https://test.com/image.jpg)"
+        text_broken_image = "This is a !test image](https://github.com/larquist/test_image.jpg) right back there."
+        text_link = "This is a [test link](https://github.com/larquist/test_image.jpg) right back there."
+
+        self.assertEqual(extract_markdown_images(text_one_image), [
+            ('test image', 'https://github.com/larquist/test_image.jpg')
+        ])
+        self.assertEqual(extract_markdown_images(text_multiple_image), [
+            ('test image', 'https://github.com/larquist/test_image.jpg'),
+            ("another", "https://test.com/image.jpg")
+        ])
+        self.assertNotEqual(extract_markdown_images(text_broken_image), [
+            [
+            ('test image', 'https://github.com/larquist/test_image.jpg')
+            ]   
+        ])
+        self.assertEqual(extract_markdown_images(text_link), [])
+
+    def test_split_nodes_image(self):
+        pass
 
 if __name__ == "__main__":
     unittest.main()
