@@ -70,21 +70,42 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     return new_nodes
 
 def split_nodes_image(old_nodes):
+    # Initiate return list
     new_nodes = []
     for node in old_nodes:
+        # Copy text to variable
         text = node.text
+
+        # Extract images from the text eg. 
+        # [
+        # ('test','testlink.com'),
+        # ('test2','testlink2.com')
+        # ]
         extract = extract_markdown_images(text)
+
+        # If length of extraction is zero that means there are no images,
+        # just return the node given.
         if len(extract) == 0:
             new_nodes.append(node)
         else:
+            # Loop through the extraction list & split the text where the image is
             for i in range(0, len(extract)):
-                text = text.split(f"![{extract[i][0]}]({extract[i][1]})")
+                # eg. ["testing ", "![test](testlink.com)", " and another ", 
+                # "![test2](testlink2.com)"]
+                text_list = text.split(f"![{extract[i][0]}]({extract[i][1]})")
 
-                text_node = TextNode(text[0], text_type_text)
-                new_nodes.append(text_node)
-                text = text[1]
-
+                # If text[0] is "" then do not append to list
+                if text[0] != "":
+                    text_node = TextNode(text_list[0], text_type_text)
+                    new_nodes.append(text_node)
+            
+                # remove the first text element from text list
+                text_list.pop(0)
+                
+                # append image to list
                 new_nodes.append(TextNode(extract[i][0], text_type_image, extract[i][1]))
+                # remove image from text_list
+                text_list.pop(0)
 
     return new_nodes
                 
