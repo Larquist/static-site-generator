@@ -18,13 +18,7 @@ from textnode import (
 import re
 
 def main():
-    one = extract_markdown_images("This is a ![test image](https://github.com/larquist/test_image.jpg) right back there.")
-    two = [
-            TextNode("This is a ", text_type_text),
-            TextNode("test image", text_type_image, "https://github.com/larquist/test_image.jpg"),
-            TextNode(" right back there.", text_type_text)
-        ]
-    print(one, two, one == two)
+    pass
 
 
 main()
