@@ -146,5 +146,29 @@ class TestTextNode(unittest.TestCase):
         ])
 
 
+    def test_split_nodes_link(self):
+        node = TextNode(
+            "This is text with an [link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another [second link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
+            text_type_text,
+        )
+        broken_node = TextNode(
+            "This is text with an !link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second link]https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
+            text_type_text,
+        )
+        expected = [
+            TextNode("This is text with an ", text_type_text),
+            TextNode("link", text_type_link, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+            TextNode(" and another ", text_type_text),
+            TextNode(
+                "second link", text_type_link, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png"
+            ),
+        ]
+        
+        self.assertEqual(split_nodes_link([node]), expected)
+        self.assertEqual(split_nodes_link([broken_node]), [
+            TextNode("This is text with an !link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second link]https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)", text_type_text)
+        ])
+
+
 if __name__ == "__main__":
     unittest.main()
