@@ -102,6 +102,26 @@ class TestTextNode(unittest.TestCase):
         ])
         self.assertEqual(extract_markdown_images(text_link), [])
 
+
+    def test_extract_markdown_links(self):
+        text_one_link = "This is a [test link](https://github.com/larquist/test_link.jpg) right back there."
+        text_multiple_link = "This is a [test link](https://github.com/larquist/test_link.jpg) right back there. Here is [another](https://test.com/link.jpg)"
+        text_broken_link = "This is a [test link]https://github.com/larquist/test_link.jpg) right back there."
+
+        self.assertEqual(extract_markdown_links(text_one_link), [
+            ('test link', 'https://github.com/larquist/test_link.jpg')
+        ])
+        self.assertEqual(extract_markdown_links(text_multiple_link), [
+            ('test link', 'https://github.com/larquist/test_link.jpg'),
+            ("another", "https://test.com/link.jpg")
+        ])
+        self.assertNotEqual(extract_markdown_links(text_broken_link), [
+            [
+            ('test link', 'https://github.com/larquist/test_link.jpg')
+            ]   
+        ])
+
+
     def test_split_nodes_image(self):
         pass
 
