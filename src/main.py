@@ -31,14 +31,19 @@ def main():
     #     TextNode(" and a ", text_type_text),
     #     TextNode("link", text_type_link, "https://boot.dev"),
     # ]
-    expected = [
-        TextNode("This is **text** with an *italic* word and a `code block` and an ", text_type_text),
-        TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
-        TextNode(" and a ", text_type_text),
-        TextNode("link", text_type_link, "https://boot.dev")
-    ]
+    # expected = [
+    #     TextNode("This is **text** with an *italic* word and a `code block` and an ", text_type_text),
+    #     TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+    #     TextNode(" and a ", text_type_text),
+    #     TextNode("link", text_type_link, "https://boot.dev")
+    # ]
 
-    print(f"{split_nodes_link(split_nodes_image([TextNode(text, text_type_text)]))} \n \n{expected} \n \n{text_to_textnode(text) == expected}")
+    link_test = [TextNode(
+            "This is text with an [link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another [second link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png) and so on...",
+            text_type_text,
+        )]
+    
+    print(split_nodes_link(link_test))
 
 
 main()

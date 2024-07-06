@@ -49,9 +49,10 @@ def text_node_to_html_node(node):
 # text_type = the textnode type to set the segmented text to
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
+    # Step through old_nodes list
     for node in old_nodes:
         split_text = node.text.split(delimiter)
-        # If length of list is 1, no
+        # If length of list is 1, no delimiter was found
         if len(split_text) == 1:
             new_nodes.append(node)
         # If len of list is even, it means only one symbol was found in the list
@@ -73,6 +74,11 @@ def split_nodes_image(old_nodes):
     new_nodes = []
     
     for node in old_nodes:
+        # If node is not a text text_type, then just append it to the list 
+        # - No action required
+        if node.text_type != "text":
+            new_nodes.append(node)
+            break
         text = node.text
 
         # Extract images from the text eg. 
@@ -82,80 +88,94 @@ def split_nodes_image(old_nodes):
         # ]
         images = extract_markdown_images(text)
 
+        # If length is 0, means there are no images present, just return 
+        # the current node as is
         if len(images) == 0:
             new_nodes.append(node)
         else:
             for i in range(0, len(images)):
+                # Split at current image, will leave behind text before and
+                # text after the image
                 split = text.split(f"![{images[i][0]}]({images[i][1]})")
+                # Target last index of images list
                 if i == len(images) - 1:
                     if split[1] == "":
+                        # If the text after the image split contains
+                        # nothing, it means that we can just append a
+                        # text_type_text then the text_type_image
+                        new_nodes.append(TextNode(split[0], text_type_text))
                         new_nodes.append(TextNode(images[i][0], text_type_image, images[i][1]))
+                        break
                     else:
-                        new_nodes.append
+                        # Else we add text0, image, text1
+                        new_nodes.append(TextNode(split[0], text_type_text))
+                        new_nodes.append(TextNode(images[i][0],
+                        text_type_image,
+                        images[i][1]))
+                        new_nodes.append(TextNode(split[1], text_type_text))
+                        break
+                
+
                 if split[0] == "":
-                    new_nodes.append(TextNode(images[i][0], text_type_image, images[i][1]))
+                    # append only image because no text came before
+                    new_nodes.append(TextNode(images[i][0],
+                    text_type_image, 
+                    images[i][1]))
                 else:
-                    new_nodes.append(TextNode(split[0]))
+                    # Append text before image and image
+                    new_nodes.append(TextNode(split[0], text_type_text))
+                    new_nodes.append(TextNode(images[i][0],
+                    text_type_image,
+                    images[i][1]))
 
-
+                # Make text the text after the image so it can be further 
+                # processed in the loop
+                text = split[1]
 
     return new_nodes
-    # # Initiate return list
-    # new_nodes = []
-    # for node in old_nodes:
-    #     # Copy text to variable
-    #     text = node.text
-
-    #     # Extract images from the text eg. 
-    #     # [
-    #     # ('test','testlink.com'),
-    #     # ('test2','testlink2.com')
-    #     # ]
-    #     extract = extract_markdown_images(text)
-
-    #     # If length of extraction is zero that means there are no images,
-    #     # just return the node given.
-    #     if len(extract) == 0:
-    #         new_nodes.append(node)
-    #     else:
-    #         # Loop through the extraction list & split the text where the image is
-    #         for i in range(0, len(extract)):
-    #             # eg. ["testing ", "![test](testlink.com)", " and another ", 
-    #             # "![test2](testlink2.com)"]
-    #             text_list = text.split(f"![{extract[i][0]}]({extract[i][1]})")
-
-    #             # If text_list[0] is "" then do not append to list
-    #             if text_list[0] != "":
-    #                 text_node = TextNode(text_list[0], text_type_text)
-    #                 new_nodes.append(text_node)
-            
-    #             # remove the first text element from text list
-    #             text_list.pop(0)
-                
-    #             # append image to list
-    #             new_nodes.append(TextNode(extract[i][0], text_type_image, extract[i][1]))
-    #             # remove image from text_list
-    #             text_list.pop(0)
-
-    # return new_nodes
                 
 
 def split_nodes_link(old_nodes):
     new_nodes = []
+    
     for node in old_nodes:
+        if node.text_type != "text":
+            new_nodes.append(node)
+            break
+
         text = node.text
-        extract = extract_markdown_links(text)
-        if len(extract) == 0:
+
+        links = extract_markdown_links(text)
+        if len(links) == 0:
             new_nodes.append(node)
         else:
-            for i in range(0, len(extract)):
-                text = text.split(f"[{extract[i][0]}]({extract[i][1]})")
+            for i in range(0, len(links)):
+                split = text.split(f"[{links[i][0]}]({links[i][1]})")
+                if i == len(links) - 1:
+                    if split[1] == "":
+                        new_nodes.append(TextNode(split[0], text_type_text))
+                        new_nodes.append(TextNode(links[i][0], text_type_link, links[i][1]))
+                        break
+                    else:
+                        new_nodes.append(TextNode(split[0], text_type_text))
+                        new_nodes.append(TextNode(links[i][0],
+                        text_type_link,
+                        links[i][1]))
+                        new_nodes.append(TextNode(split[1], text_type_text))
+                        break
+                
 
-                text_node = TextNode(text[0], text_type_text)
-                new_nodes.append(text_node)
-                text = text[1]
+                if split[0] == "":
+                    new_nodes.append(TextNode(links[i][0],
+                    text_type_link, 
+                    links[i][1]))
+                else:
+                    new_nodes.append(TextNode(split[0], text_type_text))
+                    new_nodes.append(TextNode(links[i][0],
+                    text_type_link,
+                    links[i][1]))
 
-                new_nodes.append(TextNode(extract[i][0], text_type_link, extract[i][1]))
+                text = split[1]
 
     return new_nodes
 

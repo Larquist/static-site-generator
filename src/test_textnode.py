@@ -125,7 +125,7 @@ class TestTextNode(unittest.TestCase):
 
     def test_split_nodes_image(self):
         node = TextNode(
-            "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
+            "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png) and so on...",
             text_type_text,
         )
         broken_node = TextNode(
@@ -139,6 +139,7 @@ class TestTextNode(unittest.TestCase):
             TextNode(
                 "second image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png"
             ),
+            TextNode(" and so on...", text_type_text)
         ]
         
         self.assertEqual(split_nodes_image([node]), expected)
