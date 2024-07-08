@@ -1,14 +1,16 @@
 import unittest
 
-from textnode import (
+from textnode import(
     TextNode,
     text_type_text,
+    text_type_link,
     text_type_bold,
-    text_type_italic,
     text_type_code,
     text_type_image,
-    text_type_link,
-    text_node_to_html_node,
+    text_type_italic,
+    text_node_to_html_node
+)
+from inline import(
     split_nodes_delimiter,
     extract_markdown_images,
     extract_markdown_links,
@@ -172,6 +174,7 @@ class TestTextNode(unittest.TestCase):
 
 
     def test_text_to_textnode(self):
+            self.maxDiff = None
             text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
             expected = [
                 TextNode("This is ", text_type_text),

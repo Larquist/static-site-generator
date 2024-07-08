@@ -7,6 +7,9 @@ from textnode import (
     text_type_code,
     text_type_image,
     text_type_italic,
+    text_node_to_html_node
+)
+from inline import(
     split_nodes_delimiter,
     extract_markdown_images,
     extract_markdown_links,
@@ -15,35 +18,11 @@ from textnode import (
     text_to_textnode
 )
 
-import re
-
 def main():
     text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
-    # expected = [
-    #     TextNode("This is ", text_type_text),
-    #     TextNode("text", text_type_bold),
-    #     TextNode(" with an ", text_type_text),
-    #     TextNode("italic", text_type_italic),
-    #     TextNode(" word and a ", text_type_text),
-    #     TextNode("code block", text_type_code),
-    #     TextNode(" and an ", text_type_text),
-    #     TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
-    #     TextNode(" and a ", text_type_text),
-    #     TextNode("link", text_type_link, "https://boot.dev"),
-    # ]
-    # expected = [
-    #     TextNode("This is **text** with an *italic* word and a `code block` and an ", text_type_text),
-    #     TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
-    #     TextNode(" and a ", text_type_text),
-    #     TextNode("link", text_type_link, "https://boot.dev")
-    # ]
-
-    link_test = [TextNode(
-            "This is text with an [link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another [second link](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png) and so on...",
-            text_type_text,
-        )]
     
-    print(split_nodes_link(link_test))
+    
+    print(text_to_textnode(text))
 
 
 main()
